@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>¡Feliz cumpleaños, papá!</title>
+<meta name="description" content="Toca la arena y descubre tu regalo 🌸">
+<meta property="og:title" content="¡Feliz cumpleaños, papá! 🎂">
+<meta property="og:description" content="Toca la arena y descubre tu regalo 🌸">
+<meta name="theme-color" content="#f4a261">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bloom: 0; --ink: #7a2e1b; --ink2: #5a3a28; --cream: #fffaf2; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: #f6c28b; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif; color: var(--ink2);
+    -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+    touch-action: manipulation; overscroll-behavior: none;
+  }
+
+  /* ---------- Escena ---------- */
+  #scene { position: fixed; inset: 0; height: 100dvh; overflow: hidden; cursor: pointer; touch-action: manipulation; }
+  .sky { position: absolute; inset: 0; background: linear-gradient(180deg, #f08a5d 0%, #f4a261 30%, #f6c28b 55%, #f9dcb2 75%); }
+  .sky-bloom { position: absolute; inset: 0; background: linear-gradient(180deg, #8ecae6 0%, #bde0fe 35%, #ffd6e0 62%, #fff1d6 80%); opacity: var(--bloom); transition: opacity 1s ease; }
+  .sun {
+    position: absolute; top: 33%; right: 16%; width: 84px; height: 84px; border-radius: 50%;
+    background: radial-gradient(circle, #fff6c9 0%, #ffd166 60%, #ffb703 100%);
+    box-shadow: 0 0 40px 12px rgba(255, 209, 102, .55);
+    animation: glow 4s ease-in-out infinite alternate;
+  }
+  @keyframes glow { to { box-shadow: 0 0 70px 24px rgba(255, 209, 102, .75); } }
+
+  .cloud { position: absolute; left: 0; width: 110px; height: 34px; background: #fff; border-radius: 40px; opacity: .7; animation: drift linear infinite; }
+  .cloud::before { content: ""; position: absolute; width: 50px; height: 50px; background: #fff; border-radius: 50%; top: -24px; left: 18px; }
+  .cloud::after  { content: ""; position: absolute; width: 38px; height: 38px; background: #fff; border-radius: 50%; top: -16px; left: 54px; }
+  .c1 { top: 7%;  animation-duration: 42s; animation-delay: -12s; }
+  .c2 { top: 25%; animation-duration: 58s; animation-delay: -35s; opacity: .5; }
+  @keyframes drift { from { transform: translateX(-160px); } to { transform: translateX(calc(100vw + 40px)); } }
+
+  .land {
+    position: absolute; left: 0; bottom: 0; width: 100%; height: 62%;
+    filter: saturate(calc(.8 + var(--bloom) * .5)) brightness(calc(1 + var(--bloom) * .06));
+    transition: filter 1s ease;
+  }
+
+  #cactus { position: absolute; left: 7%; bottom: 35%; width: 46px; pointer-events: none; overflow: visible; }
+  #hat { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(0) rotate(-25deg); transition: transform .7s cubic-bezier(.34, 1.56, .64, 1); }
+  #hat.on { transform: scale(1) rotate(-12deg); }
+
+  /* ---------- Flores ---------- */
+  #flowers { position: absolute; inset: 0; pointer-events: none; }
+  .flower { position: absolute; transform: translate(-50%, -100%); }
+  .flower svg { display: block; overflow: visible; }
+  .sway { transform-origin: 50% 100%; animation: sway 3.2s ease-in-out infinite alternate; }
+  @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+  .stem { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); animation: grow .45s ease-out forwards; }
+  .leaf { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: leafin .35s ease-out .25s forwards; }
+  .head { transform-box: fill-box; transform-origin: center; transform: scale(0) rotate(-120deg); animation: pop .7s cubic-bezier(.34, 1.56, .64, 1) .3s forwards; }
+  @keyframes grow { to { transform: scaleY(1); } }
+  @keyframes leafin { to { transform: scale(1); } }
+  @keyframes pop { to { transform: scale(1) rotate(0); } }
+
+  .puff { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #f3d3a0; pointer-events: none; z-index: 9998; animation: puff .6s ease-out forwards; }
+  @keyframes puff { to { transform: scale(5); opacity: 0; } }
+
+  .label {
+    position: absolute; transform: translateX(-50%); z-index: 9999; pointer-events: none;
+    font: 700 .8rem 'DM Sans', sans-serif; color: var(--ink); background: var(--cream);
+    padding: 4px 10px; border-radius: 99px; white-space: nowrap; box-shadow: 0 4px 12px rgba(122, 46, 27, .18);
+    animation: lab 1.6s ease-out forwards;
+  }
+  @keyframes lab {
+    0% { opacity: 0; transform: translate(-50%, 6px); }
+    15% { opacity: 1; transform: translate(-50%, 0); }
+    75% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -18px); }
+  }
+
+  /* ---------- Textos ---------- */
+  #intro { position: absolute; top: 12%; left: 0; right: 0; text-align: center; padding: 0 20px; z-index: 9000; pointer-events: none; transition: opacity .8s ease, transform .8s ease; }
+  #intro .pre { font-size: 1.05rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); opacity: 0; animation: up .8s .3s forwards; }
+  #intro h2 { font-family: 'Fraunces', serif; font-weight: 600; font-style: italic; font-size: clamp(2.6rem, 12vw, 4rem); line-height: 1.05; color: var(--ink); margin-top: 4px; opacity: 0; animation: up .9s 1s forwards; text-shadow: 0 2px 0 rgba(255, 250, 242, .5); }
+  #intro h2 b { color: #e63946; font-style: normal; }
+  #intro.dim { opacity: .5; transform: translateY(-8px) scale(.88); }
+
+  #hint {
+    position: absolute; left: 50%; bottom: 14%; z-index: 9000; pointer-events: none;
+    background: rgba(255, 250, 242, .92); color: var(--ink); font-weight: 700; font-size: 1rem;
+    padding: 11px 20px; border-radius: 99px; box-shadow: 0 8px 22px rgba(122, 46, 27, .2);
+    opacity: 0; transform: translateX(-50%);
+    animation: hintin .6s 2.2s forwards, bob 1.6s 2.8s ease-in-out infinite;
+  }
+  #hint.hide { display: none; }
+  @keyframes hintin { to { opacity: 1; } }
+  @keyframes bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -8px); } }
+
+  #toast {
+    position: absolute; left: 50%; top: 36%; z-index: 9500; pointer-events: none; white-space: nowrap;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 1.35rem; color: var(--ink);
+    background: rgba(255, 250, 242, .92); padding: 10px 18px; border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(122, 46, 27, .18); opacity: 0; transform: translate(-50%, 0);
+  }
+  #toast.show { animation: toast 1.9s ease forwards; }
+  @keyframes toast {
+    0% { opacity: 0; transform: translate(-50%, 10px) scale(.9); }
+    12% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -10px); }
+  }
+
+  #prog {
+    position: absolute; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); z-index: 9000; pointer-events: none;
+    display: flex; align-items: center; gap: 10px; background: rgba(255, 250, 242, .88);
+    padding: 8px 14px; border-radius: 99px; font-weight: 700; font-size: .85rem; color: var(--ink);
+    box-shadow: 0 6px 18px rgba(122, 46, 27, .15);
+    opacity: 0; transform: translate(-50%, 20px); transition: opacity .5s, transform .5s;
+  }
+  #prog.show { opacity: 1; transform: translate(-50%, 0); }
+  .bar { width: 120px; height: 8px; background: #f1dcc4; border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb703, #ff4d6d, #8e5bd6); transition: width .3s ease; }
+
+  @keyframes up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Final ---------- */
+  #petals { position: fixed; inset: 0; pointer-events: none; z-index: 4500; overflow: hidden; }
+  .petal { position: absolute; top: -20px; border-radius: 70% 0 70% 0; opacity: .9; animation: fall linear infinite; }
+  @keyframes fall {
+    0%   { transform: translate(0, -5vh) rotate(0); }
+    50%  { transform: translate(30px, 50vh) rotate(200deg); }
+    100% { transform: translate(-10px, 105vh) rotate(400deg); }
+  }
+
+  .card-wrap {
+    position: fixed; inset: 0; z-index: 5000; display: grid; place-items: start center;
+    padding: max(6vh, env(safe-area-inset-top)) 16px 16px; overflow-y: auto;
+    opacity: 0; pointer-events: none; transition: opacity .6s ease;
+  }
+  .card-wrap.show { opacity: 1; pointer-events: auto; }
+  .card {
+    width: min(100%, 380px); background: rgba(255, 250, 242, .95); border-radius: 28px;
+    padding: 26px 22px 22px; text-align: center; box-shadow: 0 20px 50px rgba(122, 46, 27, .28);
+    transform: translateY(30px) scale(.95); transition: transform .8s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .card-wrap.show .card { transform: none; }
+  .card-wrap.show .card > * { opacity: 0; animation: up .6s forwards; }
+  .card-wrap.show .card > *:nth-child(1) { animation-delay: .25s; }
+  .card-wrap.show .card > *:nth-child(2) { animation-delay: .45s; }
+  .card-wrap.show .card > *:nth-child(3) { animation-delay: .9s; }
+  .card-wrap.show .card > *:nth-child(4) { animation-delay: 1.5s; }
+  .card-wrap.show .card > *:nth-child(5) { animation-delay: 1.8s; }
+  .card-wrap.show .card > *:nth-child(6) { animation-delay: 2s; }
+  .card-wrap.show .card > *:nth-child(7) { animation-delay: 2.3s; }
+  .card-wrap.show .card > *:nth-child(8) { animation-delay: 2.8s; }
+
+  .eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: #b5651d; font-weight: 700; }
+  .card h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.05; color: var(--ink); margin: 8px 0 10px; }
+  .card h1 em { color: #e63946; }
+  .lead { font-size: 1rem; line-height: 1.45; }
+  .reveal { margin: 16px 0 12px; padding: 14px 10px; border-radius: 18px; background: linear-gradient(135deg, #ffe5ec, #fff3d6); }
+  .reveal span { display: block; font-size: .92rem; color: #7a4a32; }
+  .reveal strong {
+    display: block; font-family: 'Fraunces', serif; font-size: clamp(1.7rem, 8vw, 2.1rem); line-height: 1.15;
+    background: linear-gradient(90deg, #e63946, #d6338a, #8e5bd6); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .chips span { background: #fff; border: 1.5px solid #f1dcc4; border-radius: 99px; padding: 5px 11px; font-size: .82rem; font-weight: 600; }
+  .road { position: relative; height: 36px; margin: 14px 0 4px; border-bottom: 3px dashed #d89656; overflow: hidden; }
+  .car { position: absolute; bottom: 0; font-size: 26px; line-height: 1; animation: drive 4.5s linear infinite; }
+  .car span { display: inline-block; transform: scaleX(-1); }
+  @keyframes drive { from { left: -15%; } to { left: 105%; } }
+  .fine { font-size: .95rem; line-height: 1.45; margin-top: 8px; }
+  .fine small { display: block; opacity: .65; font-size: .8rem; margin-top: 2px; }
+  #again { margin-top: 14px; font: 700 .9rem 'DM Sans', sans-serif; border: 0; border-radius: 99px; padding: 11px 20px; background: var(--ink); color: var(--cream); cursor: pointer; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cloud, .sway, .sun, .petal { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scene">
+  <div class="sky"></div>
+  <div class="sky-bloom"></div>
+  <div class="sun"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+
+  <svg class="land" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,90 L30,55 L55,75 L90,30 L120,62 L150,45 L185,70 L220,25 L255,60 L290,40 L325,68 L360,35 L400,60 L400,300 L0,300Z" fill="#c98b6b"/>
+    <path d="M0,110 L40,80 L70,100 L110,70 L150,105 L200,78 L240,100 L280,72 L330,104 L370,82 L400,95 V300 H0Z" fill="#b8745a"/>
+    <path d="M0,125 Q60,95 130,118 T260,112 T400,108 V300 H0Z" fill="#ebbd82"/>
+    <path d="M0,170 Q90,135 190,165 T400,150 V300 H0Z" fill="#e2aa6a"/>
+    <path d="M0,230 Q120,195 230,225 T400,215 V300 H0Z" fill="#d89656"/>
+  </svg>
+
+  <!-- Cactus con lentes (y gorro de fiesta al final) -->
+  <svg id="cactus" viewBox="0 -14 60 114" aria-hidden="true">
+    <g fill="#5f8f4e">
+      <rect x="22" y="20" width="16" height="78" rx="8"/>
+      <rect x="8" y="40" width="10" height="26" rx="5"/>
+      <rect x="8" y="58" width="18" height="10" rx="5"/>
+      <rect x="42" y="30" width="10" height="24" rx="5"/>
+      <rect x="34" y="46" width="18" height="10" rx="5"/>
+    </g>
+    <g stroke="#4c7a3d" stroke-width="1.2" stroke-linecap="round">
+      <line x1="27" y1="48" x2="27" y2="92"/><line x1="33" y1="48" x2="33" y2="92"/>
+    </g>
+    <rect x="23" y="29" width="6" height="4.5" rx="1.5" fill="#2b1a12"/>
+    <rect x="31" y="29" width="6" height="4.5" rx="1.5" fill="#2b1a12"/>
+    <line x1="29" y1="30.5" x2="31" y2="30.5" stroke="#2b1a12" stroke-width="1.2"/>
+    <path d="M26.5 39 q3.5 3.5 7 0" stroke="#2b1a12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <g id="hat">
+      <polygon points="30,-8 21,21 39,21" fill="#ff4d6d"/>
+      <circle cx="28" cy="7" r="1.8" fill="#ffd166"/>
+      <circle cx="33" cy="14" r="1.8" fill="#ffd166"/>
+      <circle cx="30" cy="0" r="1.5" fill="#fff"/>
+      <circle cx="30" cy="-9" r="3.5" fill="#ffd166"/>
+    </g>
+  </svg>
+
+  <div id="flowers"></div>
+
+  <div id="intro">
+    <p class="pre">Para celebrar tus</p>
+    <h2><b>56</b> primaveras…</h2>
+  </div>
+  <div id="hint">Toca la arena 👆</div>
+  <div id="toast"></div>
+  <div id="prog">🌸 <div class="bar"><i id="pbar"></i></div><span id="ptxt">0/5</span></div>
+</div>
+
+<div id="petals"></div>
+
+<div class="card-wrap" id="card">
+  <div class="card">
+    <p class="eyebrow">56 primaveras 🌸</p>
+    <h1>¡Feliz cumpleaños,<br><em>papá!</em></h1>
+    <p class="lead">Este año el desierto florece para ti…<br>y nosotros vamos a verlo contigo.</p>
+    <div class="reveal">
+      <span>Nos vamos de roadtrip al</span>
+      <strong>Desierto Florido</strong>
+    </div>
+    <div class="chips">
+      <span>📍 Región de Atacama</span>
+      <span>🗓️ Octubre</span>
+      <span>🌙 2 noches</span>
+    </div>
+    <div class="road"><div class="car"><span>🚗</span></div></div>
+    <p class="fine">Tú pones la música, nosotros el resto 🎶<small>(no se aceptan devoluciones)</small></p>
+    <button id="again">Volver a florecer 🌸</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const GOAL = 5;
+  const scene = document.getElementById('scene');
+  const flowersEl = document.getElementById('flowers');
+  const intro = document.getElementById('intro');
+  const hint = document.getElementById('hint');
+  const toast = document.getElementById('toast');
+  const prog = document.getElementById('prog');
+  const pbar = document.getElementById('pbar');
+  const ptxt = document.getElementById('ptxt');
+  const card = document.getElementById('card');
+  const hat = document.getElementById('hat');
+  const petalsEl = document.getElementById('petals');
+  const again = document.getElementById('again');
+
+  const TYPES = [
+    { name: 'Añañuca',         c: '#e63946', c2: '#ff8fa3', n: 6, len: 11, w: 5.5, cc: '#ffd166', cr: 4 },
+    { name: 'Pata de guanaco', c: '#d6338a', c2: '#f783ac', n: 5, len: 10, w: 8,   cc: '#ffe066', cr: 4.5 },
+    { name: 'Garra de león',   c: '#ffb703', c2: '#ffd166', n: 8, len: 11, w: 3.5, cc: '#e85d04', cr: 4 },
+    { name: 'Suspiro',         c: '#8e5bd6', c2: '#c3a6f0', n: 5, len: 9,  w: 7,   cc: '#fff8e7', cr: 3.5 },
+    { name: 'Malvilla',        c: '#ff7eb6', c2: '#ffc2d9', n: 6, len: 9,  w: 6,   cc: '#fff3b0', cr: 3.5 },
+    { name: 'Coronilla',       c: '#ffffff', c2: '#ffe3ec', n: 8, len: 9,  w: 4,   cc: '#ffc300', cr: 4 }
+  ];
+
+  const MESSAGES = {
+    1: '¡Eso! 🌱',
+    2: 'El desierto está despertando…',
+    3: '¡Mira esos colores! 😍',
+    4: '¡Uno más!'
+  };
+
+  let state = 'intro';
+  let count = 0;
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  function flowerSVG(t, curve, h) {
+    let p = '', q = '';
+    for (let i = 0; i < t.n; i++) {
+      const a = i * 360 / t.n;
+      p += `<ellipse cx="0" cy="${-t.len}" rx="${t.w}" ry="${t.len}" fill="${t.c}" transform="rotate(${a})"/>`;
+      q += `<ellipse cx="0" cy="${-t.len * .55}" rx="${t.w * .55}" ry="${t.len * .55}" fill="${t.c2}" transform="rotate(${a + 180 / t.n})"/>`;
+    }
+    const lx = curve > 0 ? -1 : 1;
+    const hx = (curve * .4).toFixed(1);
+    return `<svg width="${(h * .6).toFixed(0)}" height="${h.toFixed(0)}" viewBox="-30 -100 60 100">
+      <path class="stem" d="M0 0 Q${curve.toFixed(1)} -38 ${hx} -70" stroke="#5b8c3e" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path class="leaf" d="M0 -18 q${14 * lx} -12 ${22 * lx} -4 q${-10 * lx} 9 ${-22 * lx} 4z" fill="#73a84c"/>
+      <g transform="translate(${hx} -70)"><g class="head">${p}${q}<circle r="${t.cr}" fill="${t.cc}"/></g></g>
+    </svg>`;
+  }
+
+  function spawn(x, y, opts = {}) {
+    const { label = false, delay = 0 } = opts;
+    const W = scene.clientWidth, H = scene.clientHeight;
+    const top = H * .57, bot = H * .97;
+    if (y < top) y = rand(top, top + (bot - top) * .5);
+    y = Math.min(y, bot);
+    x = Math.max(8, Math.min(W - 8, x));
+    const depth = (y - top) / (bot - top);
+    const h = (38 + depth * 62) * rand(.85, 1.15);
+    const t = TYPES[Math.floor(Math.random() * TYPES.length)];
+
+    const el = document.createElement('div');
+    el.className = 'flower';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.zIndex = Math.round(y);
+    el.innerHTML = `<div class="sway" style="animation-delay:${-rand(0, 3).toFixed(2)}s">${flowerSVG(t, rand(-8, 8), h)}</div>`;
+
+    setTimeout(() => {
+      if (state === 'reset') return;
+      flowersEl.appendChild(el);
+      if (label) {
+        const l = document.createElement('div');
+        l.className = 'label';
+        l.textContent = t.name;
+        l.style.left = Math.max(60, Math.min(W - 60, x)) + 'px';
+        l.style.top = Math.max(10, y - h - 30) + 'px';
+        flowersEl.appendChild(l);
+        setTimeout(() => l.remove(), 1600);
+      }
+    }, delay);
+  }
+
+  function puff(x, y) {
+    const p = document.createElement('div');
+    p.className = 'puff';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    flowersEl.appendChild(p);
+    setTimeout(() => p.remove(), 650);
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.remove('show');
+    void toast.offsetWidth;
+    toast.classList.add('show');
+  }
+
+  function setBloom(v) {
+    document.documentElement.style.setProperty('--bloom', v.toFixed(3));
+  }
+
+  function updateProg() {
+    pbar.style.width = Math.min(100, count / GOAL * 100) + '%';
+    ptxt.textContent = `${Math.min(count, GOAL)}/${GOAL}`;
+  }
+
+  scene.addEventListener('pointerdown', (e) => {
+    if (state !== 'intro' && state !== 'playing') return;
+    if (state === 'intro') {
+      state = 'playing';
+      intro.classList.add('dim');
+      hint.classList.add('hide');
+      prog.classList.add('show');
+    }
+    const r = scene.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    puff(x, y);
+    spawn(x, y, { label: true });
+    for (let i = 1; i <= 4; i++) {
+      spawn(x + rand(-70, 70), y + rand(-15, 35), { delay: i * 80 });
+    }
+    if (navigator.vibrate) navigator.vibrate(12);
+
+    count++;
+    updateProg();
+    setBloom(count / GOAL * .6);
+    if (MESSAGES[count]) showToast(MESSAGES[count]);
+    if (count >= GOAL) finale();
+  });
+
+  function finale() {
+    state = 'finale';
+    prog.classList.remove('show');
+    showToast('¡Lo lograste! 🌸🌸🌸');
+    setBloom(1);
+    const W = scene.clientWidth, H = scene.clientHeight;
+    for (let i = 0; i < 50; i++) spawn(rand(10, W - 10), rand(H * .58, H * .97), { delay: 300 + i * 45 });
+    setTimeout(() => hat.classList.add('on'), 1400);
+    setTimeout(() => {
+      if (state !== 'finale') return;
+      card.classList.add('show');
+      startPetals();
+      state = 'done';
+    }, 3000);
+  }
+
+  function startPetals() {
+    const cols = ['#ff4d6d', '#ffb703', '#8e5bd6', '#d6338a', '#ffffff', '#ff8fa3'];
+    for (let i = 0; i < 36; i++) {
+      const p = document.createElement('i');
+      p.className = 'petal';
+      const s = rand(8, 14);
+      p.style.cssText = `left:${rand(0, 100)}%;width:${s}px;height:${s * .7}px;background:${cols[i % cols.length]};animation-duration:${rand(5, 9)}s;animation-delay:${-rand(0, 8)}s`;
+      petalsEl.appendChild(p);
+    }
+  }
+
+  again.addEventListener('click', () => {
+    state = 'reset';
+    flowersEl.innerHTML = '';
+    petalsEl.innerHTML = '';
+    card.classList.remove('show');
+    hat.classList.remove('on');
+    count = 0;
+    updateProg();
+    setBloom(0);
+    intro.classList.remove('dim');
+    hint.classList.remove('hide');
+    setTimeout(() => { state = 'intro'; }, 50);
+  });
+})();
+</script>
+</body>
+</html>
